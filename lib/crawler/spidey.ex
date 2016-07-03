@@ -1,5 +1,4 @@
 defmodule Crawler.Spidey do
-  @user_agent [{"User-agent", "Elixir Crawler (Fear not!)"}]
   @max_depth 2
   @task_timeout 60000
 
@@ -18,7 +17,7 @@ defmodule Crawler.Spidey do
   defp populate_sitemap(base, url, max_depth) do
     try do
       IO.puts "[+] Process url #{url}"
-      page = process_page(url)
+      page = Crawler.Page.process_page(url)
       urls_to_follow = page.sites
                         |> Enum.filter(&(!site_already_processed?(&1)))
                         |> Enum.map(&convert_to_absolute_url(base, &1))
@@ -35,44 +34,6 @@ defmodule Crawler.Spidey do
     end
   end
 
-  defp process_page(url) do
-    html = case get_html_page(url) do
-      {:ok, body} -> body
-      {:redirect, _} -> raise "Not Implemented yet!"
-      {:skip, _} -> raise "Ignore error and discard page"
-      {:error, _} -> raise "Nasty error"
-    end
-
-    parse_html_page(url, html)
-  end
-
-  defp get_html_page(url) do
-    url
-    |> HTTPoison.get(@user_agent)
-    |> handle_response
-  end
-
-  defp parse_html_page(url, content) do
-    sites = extract_site_urls(content)
-    images = extract_image_urls(content)
-
-    %Page{url: url, sites: sites, images: images}
-  end
-
-  defp extract_site_urls(content) do
-    content
-    |> Floki.find("a")
-    |> Floki.attribute("href")
-    |> Enum.map(fn(url) -> url end)
-  end
-
-  defp extract_image_urls(content) do
-    content
-    |> Floki.find("img")
-    |> Floki.attribute("src")
-    |> Enum.map(fn(url) -> url end)
-  end
-
   defp add_page_to_sitemap(page) do
     unless Crawler.SiteMap.has_page?(page.url) do
       Crawler.SiteMap.add_page(page)
@@ -83,7 +44,7 @@ defmodule Crawler.Spidey do
     cond do
       String.match?(url, ~r/^(http|https)/) -> url
       String.match?(url, ~r/^\//)           -> "#{base}#{url}"
-      true                                   -> "#{base}/#{url}"
+      true                                  -> "#{base}/#{url}"
     end
   end
 
@@ -93,23 +54,5 @@ defmodule Crawler.Spidey do
 
   defp site_already_processed?(url) do
     Crawler.SiteMap.has_page?(url)
-  end
-
-  defp handle_response({:ok, %HTTPoison.Response{status_code: 200, body: body}}) do
-    { :ok, body }
-  end
-
-  defp handle_response({:ok, %HTTPoison.Response{status_code: 301, body: body}}) do
-    { :redirect, body }
-  end
-
-  defp handle_response({:ok, %HTTPoison.Response{status_code: status_code, body: body}}) do
-    IO.inspect "#{status_code} - #{body}"
-    { :skip, body }
-  end
-
-  defp handle_response({_, %HTTPoison.Error{reason: reason}}) do
-    IO.inspect reason
-    { :error, reason }
   end
 end
