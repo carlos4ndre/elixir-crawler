@@ -24,6 +24,6 @@ defmodule Crawler.CLI do
   end
 
   def process({url}) do
-    IO.inspect Crawler.Website.generate_sitemap(url)
+    IO.inspect Crawler.Spidey.generate_sitemap(url)
   end
 end

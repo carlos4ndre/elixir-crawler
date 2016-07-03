@@ -1,4 +1,4 @@
-defmodule Crawler.Website do
+defmodule Crawler.Spidey do
   @user_agent [{"User-agent", "Elixir Crawler (Fear not!)"}]
   @max_depth 2
   @task_timeout 60000
@@ -19,15 +19,15 @@ defmodule Crawler.Website do
     try do
       IO.puts "[+] Process url #{url}"
       page = process_page(url)
-      links_to_follow = page.sites
+      urls_to_follow = page.sites
                         |> Enum.filter(&(!site_already_processed?(&1)))
-                        |> Enum.map(&convert_link_to_absolute_url(base, &1))
+                        |> Enum.map(&convert_to_absolute_url(base, &1))
                         |> Enum.filter(&(is_valid_site?(base, &1)))
 
-      # save page before start processing any link
+      # save page before start processing any url
       add_page_to_sitemap(page)
 
-      links_to_follow
+      urls_to_follow
       |> Enum.map(&Task.async(fn -> populate_sitemap(base, &1, max_depth-1) end))
       |> Enum.map(&Task.await(&1, @task_timeout))
     rescue
@@ -53,20 +53,20 @@ defmodule Crawler.Website do
   end
 
   defp parse_html_page(url, content) do
-    sites = extract_site_links(content)
-    images = extract_image_links(content)
+    sites = extract_site_urls(content)
+    images = extract_image_urls(content)
 
     %Page{url: url, sites: sites, images: images}
   end
 
-  defp extract_site_links(content) do
+  defp extract_site_urls(content) do
     content
     |> Floki.find("a")
     |> Floki.attribute("href")
     |> Enum.map(fn(url) -> url end)
   end
 
-  defp extract_image_links(content) do
+  defp extract_image_urls(content) do
     content
     |> Floki.find("img")
     |> Floki.attribute("src")
@@ -79,11 +79,11 @@ defmodule Crawler.Website do
     end
   end
 
-  defp convert_link_to_absolute_url(base, link) do
+  defp convert_to_absolute_url(base, url) do
     cond do
-      String.match?(link, ~r/^(http|https)/) -> link
-      String.match?(link, ~r/^\//)           -> "#{base}#{link}"
-      true                                   -> "#{base}/#{link}"
+      String.match?(url, ~r/^(http|https)/) -> url
+      String.match?(url, ~r/^\//)           -> "#{base}#{url}"
+      true                                   -> "#{base}/#{url}"
     end
   end
 
