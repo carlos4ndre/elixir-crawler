@@ -17,15 +17,15 @@ defmodule Crawler.Spidey do
 
   defp populate_sitemap(base, url, max_depth) do
     try do
-      if site_already_processed?(url) do
+      if url_already_processed?(url) do
         Logger.info "Already processed url #{url}"
       else
         Logger.info "Process url #{url}"
         page = Crawler.Page.process_page(url)
         urls_to_follow = page.sites
-                          |> Enum.filter(&(!site_already_processed?(&1)))
+                          |> Enum.filter(&(!url_already_processed?(&1)))
                           |> Enum.map(&convert_to_absolute_url(base, &1))
-                          |> Enum.filter(&(is_valid_site?(base, &1)))
+                          |> Enum.filter(&(from_same_domain?(base, &1)))
 
         # save page before start processing any url
         add_page_to_sitemap(page)
@@ -53,11 +53,11 @@ defmodule Crawler.Spidey do
     end
   end
 
-  defp is_valid_site?(base, url) do
+  defp from_same_domain?(base, url) do
     String.contains?(url, base)
   end
 
-  defp site_already_processed?(url) do
+  defp url_already_processed?(url) do
     Crawler.SiteMap.has_page?(url)
   end
 end
