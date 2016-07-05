@@ -1,4 +1,5 @@
 defmodule Crawler.Spidey do
+  require Logger
   @max_depth 2
   @task_timeout 60000
 
@@ -11,12 +12,12 @@ defmodule Crawler.Spidey do
   defp populate_sitemap(base, url, max_depth \\ @max_depth)
 
   defp populate_sitemap(_base, url, 0) do
-    IO.puts "[!] Crawler reached maximum depth for url #{url}"
+    Logger.error "Crawler reached maximum depth for url #{url}"
   end
 
   defp populate_sitemap(base, url, max_depth) do
     try do
-      IO.puts "[+] Process url #{url}"
+      Logger.info "Process url #{url}"
       page = Crawler.Page.process_page(url)
       urls_to_follow = page.sites
                         |> Enum.filter(&(!site_already_processed?(&1)))

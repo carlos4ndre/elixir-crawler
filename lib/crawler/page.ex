@@ -1,4 +1,5 @@
 defmodule Crawler.Page do
+  require Logger
   @user_agent [{"User-agent", "Elixir Crawler (Fear not!)"}]
 
   def process_page(url) do
@@ -48,12 +49,12 @@ defmodule Crawler.Page do
   end
 
   defp handle_response({:ok, %HTTPoison.Response{status_code: status_code, body: body}}) do
-    IO.inspect "#{status_code} - #{body}"
+    Logger.error "#{status_code} - #{body}"
     { :skip, body }
   end
 
   defp handle_response({_, %HTTPoison.Error{reason: reason}}) do
-    IO.inspect reason
+    Logger.error reason
     { :error, reason }
   end
 end
