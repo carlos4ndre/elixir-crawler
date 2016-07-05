@@ -29,14 +29,12 @@ defmodule Crawler.Page do
     content
     |> Floki.find("a")
     |> Floki.attribute("href")
-    |> Enum.map(fn(url) -> url end)
   end
 
   defp extract_image_urls(content) do
     content
     |> Floki.find("img")
     |> Floki.attribute("src")
-    |> Enum.map(fn(url) -> url end)
   end
 
   defp handle_response({:ok, %HTTPoison.Response{status_code: 200, body: body}}) do
