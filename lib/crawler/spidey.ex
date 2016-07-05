@@ -17,19 +17,23 @@ defmodule Crawler.Spidey do
 
   defp populate_sitemap(base, url, max_depth) do
     try do
-      Logger.info "Process url #{url}"
-      page = Crawler.Page.process_page(url)
-      urls_to_follow = page.sites
-                        |> Enum.filter(&(!site_already_processed?(&1)))
-                        |> Enum.map(&convert_to_absolute_url(base, &1))
-                        |> Enum.filter(&(is_valid_site?(base, &1)))
+      if site_already_processed?(url) do
+        Logger.info "Already processed url #{url}"
+      else
+        Logger.info "Process url #{url}"
+        page = Crawler.Page.process_page(url)
+        urls_to_follow = page.sites
+                          |> Enum.filter(&(!site_already_processed?(&1)))
+                          |> Enum.map(&convert_to_absolute_url(base, &1))
+                          |> Enum.filter(&(is_valid_site?(base, &1)))
 
-      # save page before start processing any url
-      add_page_to_sitemap(page)
+        # save page before start processing any url
+        add_page_to_sitemap(page)
 
-      urls_to_follow
-      |> Enum.map(&Task.async(fn -> populate_sitemap(base, &1, max_depth-1) end))
-      |> Enum.map(&Task.await(&1, @task_timeout))
+        urls_to_follow
+        |> Enum.map(&Task.async(fn -> populate_sitemap(base, &1, max_depth-1) end))
+        |> Enum.map(&Task.await(&1, @task_timeout))
+      end
     rescue
       e in RuntimeError -> e
     end
