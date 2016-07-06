@@ -12,7 +12,7 @@ defmodule Crawler.Spidey do
   defp populate_sitemap(base, url, max_depth \\ @max_depth)
 
   defp populate_sitemap(_base, url, 0) do
-    Logger.error "Crawler reached maximum depth for url #{url}"
+    Logger.warn "Crawler reached maximum depth for url #{url}"
   end
 
   defp populate_sitemap(base, url, max_depth) do
