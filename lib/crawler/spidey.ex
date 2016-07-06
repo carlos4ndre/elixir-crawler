@@ -2,6 +2,7 @@ defmodule Crawler.Spidey do
   require Logger
   @max_depth 2
   @task_timeout 60000
+  @domain_regex ~r/^http[s]{0,1}:\/\/(.*?)(?:[\/?&#]|$)/i
 
   def generate_sitemap(url) do
     Crawler.SiteMap.start_link
@@ -54,7 +55,13 @@ defmodule Crawler.Spidey do
   end
 
   defp from_same_domain?(base, url) do
-    String.contains?(url, base)
+    source_domain = extract_domain_from_url(base)
+    target_domain = extract_domain_from_url(url)
+    String.contains?(target_domain, source_domain)
+  end
+
+  defp extract_domain_from_url(url) do
+    Regex.run(@domain_regex, url) |> Enum.at(1)
   end
 
   defp url_already_processed?(url) do
