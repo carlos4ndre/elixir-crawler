@@ -9,7 +9,11 @@ defmodule CrawlerTest do
     assert parse_args(["--help", "anything"]) == :help
   end
 
-  test "url parameter is properly parsed" do
-    assert parse_args(["http://example.com"]) == { "http://example.com" }
+  test "parameters are properly parsed" do
+    assert parse_args(["http://example.com", "3"]) == { "http://example.com", 3 }
+  end
+
+  test "max_depth default value is correct" do
+    assert parse_args(["http://example.com"]) == { "http://example.com", 2 }
   end
 end

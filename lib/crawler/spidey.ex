@@ -1,16 +1,16 @@
 defmodule Crawler.Spidey do
   require Logger
-  @max_depth 2
   @task_timeout 60000
   @domain_regex ~r/^http[s]{0,1}:\/\/(.*?)(?:[\/?&#]|$)/i
 
-  def generate_sitemap(url) do
+  def generate_sitemap({url, max_depth}) do
+    Logger.info "Generate sitemap for #{url} using a max_depth of #{max_depth}"
     Crawler.SiteMap.start_link
-    populate_sitemap(url, url)
+    populate_sitemap(url, url, max_depth)
     Crawler.SiteMap.to_json
   end
 
-  defp populate_sitemap(base, url, max_depth \\ @max_depth)
+  defp populate_sitemap(base, url, max_depth)
 
   defp populate_sitemap(_base, url, 0) do
     Logger.warn "Crawler reached maximum depth for url #{url}"

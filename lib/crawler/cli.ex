@@ -1,4 +1,5 @@
 defmodule Crawler.CLI do
+  @default_max_depth 2
 
   def main(argv) do
     argv
@@ -11,19 +12,20 @@ defmodule Crawler.CLI do
                                      aliases:  [ h:    :help   ])
     case parse do
       { [ help: true ], _, _ } -> :help
-      { _, [ url ],    _ } -> { url }
+      { _, [ url, max_depth ], _ } -> { url, String.to_integer(max_depth) }
+      { _, [ url ],            _ } -> { url, @default_max_depth }
       _ -> :help
     end
   end
 
   def process(:help) do
     IO.puts """
-    usage:  crawler <url>
+    usage:  crawler <url> [ max_depth | #{@default_max_depth} ]
     """
     System.halt(0)
   end
 
-  def process({url}) do
-    IO.puts Crawler.Spidey.generate_sitemap(url)
+  def process({url, max_depth}) do
+    IO.puts Crawler.Spidey.generate_sitemap({url, max_depth})
   end
 end
