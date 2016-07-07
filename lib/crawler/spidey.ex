@@ -33,7 +33,7 @@ defmodule Crawler.Spidey do
 
         urls_to_follow
         |> Enum.map(&Task.async(fn -> populate_sitemap(base, &1, max_depth-1) end))
-        |> Enum.map(&Task.await(&1, @task_timeout))
+        |> Enum.map(&Task.yield(&1, @task_timeout))
       end
     rescue
       _error -> Logger.error "Failed to process url #{url}"
