@@ -36,7 +36,7 @@ defmodule Crawler.Spidey do
         |> Enum.map(&Task.await(&1, @task_timeout))
       end
     rescue
-      e in RuntimeError -> e
+      _error -> Logger.error "Failed to process url #{url}"
     end
   end
 
