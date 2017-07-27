@@ -1,3 +1,6 @@
+[![Travis build](https://secure.travis-ci.org/carlos4ndre/elixir-crawler.svg?branch=master
+"Build Status")](https://travis-ci.org/carlos4ndre/elixir-crawler)
+
 # Elixir Crawler
 Web Crawler written in Elixir
 
