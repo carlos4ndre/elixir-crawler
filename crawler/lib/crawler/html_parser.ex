@@ -1,8 +1,10 @@
-defmodule Crawler.Page do
+defmodule Crawler.HTMLParser do
   require Logger
+  alias SiteMap.Page
+
   @user_agent [{"User-agent", "Elixir Crawler (Fear not!)"}]
 
-  def process_page(url) do
+  def parse_page(url) do
     html = case get_html_page(url) do
       {:ok, body} -> body
       {:redirect, _} -> raise "Not Implemented yet!"

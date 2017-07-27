@@ -1,4 +1,4 @@
-defmodule Crawler.CLI do
+defmodule CLI.Runner do
   require Logger
 
   @default_max_depth 2
@@ -26,7 +26,8 @@ defmodule Crawler.CLI do
   end
 
   def process({url, max_depth}) do
-    Crawler.Spidey.generate_sitemap({url, max_depth})
-    |> IO.puts
+    Logger.info("Generate sitemap for #{url} using a max_depth of #{max_depth}")
+    Crawler.scrape_website({url, max_depth})
+    Crawler.print_results()
   end
 end

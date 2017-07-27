@@ -8,9 +8,9 @@ defmodule SiteMap.Agent do
     Agent.start_link(fn -> %{} end, name: @me)
   end
 
-  def has_page?(page) do
+  def has_url?(url) do
     Agent.get(@me, fn sitemap ->
-      Map.has_key?(sitemap, page.url)
+      Map.has_key?(sitemap, url)
     end)
   end
 
