@@ -1,8 +1,6 @@
-defmodule CrawlerTest do
+defmodule CliTest do
   use ExUnit.Case
-  doctest Crawler
-
-  import Crawler.CLI, only: [ parse_args: 1 ]
+  import CLI.Runner, only: [ parse_args: 1 ]
 
   test ":help returned by option parsing with -h and --help options" do
     assert parse_args(["-h", "anything"])     == :help
@@ -16,4 +14,5 @@ defmodule CrawlerTest do
   test "max_depth default value is correct" do
     assert parse_args(["http://example.com"]) == { "http://example.com", 2 }
   end
+
 end

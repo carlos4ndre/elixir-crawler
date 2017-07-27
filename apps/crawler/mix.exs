@@ -2,12 +2,17 @@ defmodule Crawler.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :crawler,
-     version: "0.1.0",
-     elixir: "~> 1.5.0",
-     build_embedded: Mix.env == :prod,
-     start_permanent: Mix.env == :prod,
-     deps: deps()]
+    [
+      app: :crawler,
+      version: "0.1.0",
+      elixir: "~> 1.5.0",
+      start_permanent: Mix.env == :prod,
+      build_path: "../../_build",
+      config_path: "../../config/config.exs",
+      deps_path: "../../deps",
+      lockfile: "../../mix.lock",
+      deps: deps(),
+    ]
   end
 
   def application do
@@ -23,7 +28,7 @@ defmodule Crawler.Mixfile do
       {:poison, "~> 3.1.0"},
       {:poolboy, "~> 1.5.1"},
       {:floki, "~> 0.17.2"},
-      {:sitemap, path: "../sitemap"},
+      {:sitemap, in_umbrella: true},
     ]
   end
 end

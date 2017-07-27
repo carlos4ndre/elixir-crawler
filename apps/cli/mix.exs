@@ -6,9 +6,13 @@ defmodule Cli.Mixfile do
       app: :cli,
       version: "0.1.0",
       elixir: "~> 1.5.0",
-      escript: [main_module: CLI.Runner],
       start_permanent: Mix.env == :prod,
-      deps: deps()
+      build_path: "../../_build",
+      config_path: "../../config/config.exs",
+      deps_path: "../../deps",
+      lockfile: "../../mix.lock",
+      escript: [main_module: CLI.Runner, name: :crawler],
+      deps: deps(),
     ]
   end
 
@@ -20,7 +24,7 @@ defmodule Cli.Mixfile do
 
   defp deps do
     [
-      {:crawler, path: "../crawler"},
+      {:crawler, in_umbrella: true},
     ]
   end
 end

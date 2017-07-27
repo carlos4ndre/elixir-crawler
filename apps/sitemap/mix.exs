@@ -6,8 +6,11 @@ defmodule Sitemap.Mixfile do
       app: :sitemap,
       version: "0.1.0",
       elixir: "~> 1.5.0",
-      build_embedded: Mix.env == :prod,
       start_permanent: Mix.env == :prod,
+      build_path: "../../_build",
+      config_path: "../../config/config.exs",
+      deps_path: "../../deps",
+      lockfile: "../../mix.lock",
       deps: deps(),
     ]
   end
