@@ -1,10 +1,12 @@
 defmodule Crawler.CLI do
+  require Logger
+
   @default_max_depth 2
 
   def main(argv) do
     argv
-      |> parse_args
-      |> process
+    |> parse_args
+    |> process
   end
 
   def parse_args(argv) do
@@ -19,13 +21,12 @@ defmodule Crawler.CLI do
   end
 
   def process(:help) do
-    IO.puts """
-    usage:  crawler <url> [ max_depth | #{@default_max_depth} ]
-    """
+    IO.puts("usage:  crawler <url> [ max_depth | #{@default_max_depth} ]")
     System.halt(0)
   end
 
   def process({url, max_depth}) do
-    IO.puts Crawler.Spidey.generate_sitemap({url, max_depth})
+    Crawler.Spidey.generate_sitemap({url, max_depth})
+    |> IO.puts
   end
 end
