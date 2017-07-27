@@ -4,7 +4,7 @@ defmodule Crawler.Spidey do
   @timeout 60000
 
   def scrape_website({url, 0}) do
-    Logger.warn("Crawler reached maximum depth for url #{url}")
+    Logger.warn("Crawler has reached maximum depth for url #{url}")
   end
 
   def scrape_website({url, max_depth}) do
@@ -14,7 +14,8 @@ defmodule Crawler.Spidey do
 
     # follow links
     page.sites
-    |> Enum.each(&scrape_website({&1, max_depth-1}))
+    |> Enum.map(&(Task.async(fn -> scrape_website({&1, max_depth - 1}) end)))
+    |> Enum.map(&Task.await/1)
   end
 
   def print_results() do
