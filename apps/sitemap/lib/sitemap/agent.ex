@@ -20,11 +20,7 @@ defmodule SiteMap.Agent do
     end)
   end
 
-  def to_json() do
-    Agent.get(@me, fn sitemap ->
-      pages = Map.values(sitemap)
-      {:ok, json} = Poison.encode(pages)
-      json
-    end)
+  def get_sitemap() do
+    Agent.get(@me, fn sitemap -> sitemap end)
   end
 end

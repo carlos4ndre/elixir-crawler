@@ -21,8 +21,36 @@ defmodule Crawler.Spidey do
   end
 
   def print_results() do
-    SiteMap.to_json()
-    |> IO.puts
+    sitemap = SiteMap.get_sitemap()
+    for {_, page} <- sitemap do
+      print_page(page)
+    end
+  end
+
+  defp print_page(page) do
+    print_page_title(page.url)
+    print_page_sites(page.sites)
+    print_page_images(page.images)
+  end
+
+  defp print_page_title(url) do
+    separator = url
+                |> String.length()
+                |> (&String.duplicate("-", &1)).()
+
+    IO.puts(separator)
+    IO.puts(url)
+    IO.puts(separator)
+  end
+
+  defp print_page_sites(sites) do
+    IO.puts("SITES:")
+    Enum.each(sites, &IO.puts("> #{&1}"))
+  end
+
+  defp print_page_images(images) do
+    IO.puts("IMAGES:")
+    Enum.each(images, &IO.puts("> #{&1}"))
   end
 
   defp fetch_page(url) do
