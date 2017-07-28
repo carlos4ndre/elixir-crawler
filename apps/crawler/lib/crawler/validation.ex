@@ -1,4 +1,4 @@
-defmodule SiteMap.Validation do
+defmodule Crawler.Validation do
   @supported_schemes ["http", "https"]
 
   def url_valid?(str) do

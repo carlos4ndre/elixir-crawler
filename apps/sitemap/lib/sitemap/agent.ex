@@ -1,6 +1,5 @@
 defmodule SiteMap.Agent do
   require Logger
-  alias SiteMap.Validation
 
   @me :sitemap
 
@@ -15,19 +14,10 @@ defmodule SiteMap.Agent do
   end
 
   def add_page(page) do
-    valid_url = Validation.url_valid?(page.url)
-    _add_page(page, valid_url)
-  end
-
-  def _add_page(page, _valid_url = true) do
     Agent.get_and_update(@me, fn sitemap ->
       new_sitemap = Map.put(sitemap, page.url, page)
       {:ok, new_sitemap}
     end)
-  end
-
-  def _add_page(page, _valid_url) do
-    Logger.warn("Invalid url: #{page.url}")
   end
 
   def to_json() do

@@ -1,5 +1,6 @@
 defmodule Crawler.Spidey do
   require Logger
+  alias Crawler.Validation
 
   @timeout 60_000
 
@@ -12,8 +13,9 @@ defmodule Crawler.Spidey do
     page = Task.await(task, @timeout)
     SiteMap.add_page(page)
 
-    # follow links
+    # follow valid websites
     page.sites
+    |> Enum.filter(&Validation.url_valid?/1)
     |> Enum.map(&(Task.async(fn -> scrape_website({&1, max_depth - 1}) end)))
     |> Enum.map(&Task.await/1)
   end
