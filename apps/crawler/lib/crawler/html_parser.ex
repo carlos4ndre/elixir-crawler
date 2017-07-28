@@ -43,20 +43,20 @@ defmodule Crawler.HTMLParser do
   end
 
   defp handle_response({:ok, %HTTPoison.Response{status_code: 200, body: body}}) do
-    { :ok, body }
+    {:ok, body}
   end
 
   defp handle_response({:ok, %HTTPoison.Response{status_code: 301, body: body}}) do
-    { :redirect, body }
+    {:redirect, body}
   end
 
   defp handle_response({:ok, %HTTPoison.Response{status_code: status_code, body: body}}) do
     Logger.error "#{status_code} - #{body}"
-    { :skip, body }
+    {:skip, body}
   end
 
   defp handle_response({_, %HTTPoison.Error{reason: reason}}) do
     Logger.error reason
-    { :error, reason }
+    {:error, reason}
   end
 end

@@ -1,14 +1,14 @@
 defmodule Crawler.Spidey do
   require Logger
 
-  @timeout 60000
+  @timeout 60_000
 
   def scrape_website({url, 0}) do
     Logger.warn("Crawler has reached maximum depth for url #{url}")
   end
 
   def scrape_website({url, max_depth}) do
-    task = Task.async(fetch_page_async(url))
+    task = Task.async(fetch_page(url))
     page = Task.await(task, @timeout)
     SiteMap.add_page(page)
 
@@ -23,7 +23,7 @@ defmodule Crawler.Spidey do
     |> IO.puts
   end
 
-  defp fetch_page_async(url) do
+  defp fetch_page(url) do
     fn -> :poolboy.transaction(
       :page_pool,
       &(GenServer.call(&1, {:fetch, url})),

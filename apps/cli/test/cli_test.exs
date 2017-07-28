@@ -1,6 +1,6 @@
 defmodule CliTest do
   use ExUnit.Case
-  import CLI.Runner, only: [ parse_args: 1 ]
+  import CLI.Runner, only: [parse_args: 1]
 
   test ":help returned by option parsing with -h and --help options" do
     assert parse_args(["-h", "anything"])     == :help
@@ -8,11 +8,11 @@ defmodule CliTest do
   end
 
   test "parameters are properly parsed" do
-    assert parse_args(["http://example.com", "3"]) == { "http://example.com", 3 }
+    assert parse_args(["http://example.com", "3"]) == {"http://example.com", 3}
   end
 
   test "max_depth default value is correct" do
-    assert parse_args(["http://example.com"]) == { "http://example.com", 2 }
+    assert parse_args(["http://example.com"]) == {"http://example.com", 2}
   end
 
 end

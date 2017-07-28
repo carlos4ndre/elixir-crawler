@@ -10,12 +10,12 @@ defmodule CLI.Runner do
   end
 
   def parse_args(argv) do
-    parse = OptionParser.parse(argv, switches: [ help: :boolean],
-                                     aliases:  [ h:    :help   ])
+    parse = OptionParser.parse(argv, switches: [help: :boolean],
+                                     aliases:  [h:    :help])
     case parse do
-      { [ help: true ], _, _ } -> :help
-      { _, [ url, max_depth ], _ } -> { url, String.to_integer(max_depth) }
-      { _, [ url ],            _ } -> { url, @default_max_depth }
+      {[help: true], _, _} -> :help
+      {_, [url, max_depth], _} -> {url, String.to_integer(max_depth)}
+      {_, [url],            _} -> {url, @default_max_depth}
       _ -> :help
     end
   end

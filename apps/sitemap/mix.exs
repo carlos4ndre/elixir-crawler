@@ -18,7 +18,7 @@ defmodule Sitemap.Mixfile do
   def application do
     [
       extra_applications: [:logger],
-      mod: { SiteMap.Application, [] },
+      mod: {SiteMap.Application, []},
     ]
   end
 

@@ -18,7 +18,7 @@ defmodule Crawler.Mixfile do
   def application do
     [
       extra_applications: [:logger, :httpoison, :poolboy],
-      mod: { Crawler.Application, [] },
+      mod: {Crawler.Application, []},
     ]
   end
 
