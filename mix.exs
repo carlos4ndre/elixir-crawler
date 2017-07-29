@@ -10,6 +10,8 @@ defmodule CrawlerUmbrella.Mixfile do
   end
 
   defp deps do
-    []
+    [
+      {:distillery, "~> 1.4", runtime: false},
+    ]
   end
 end
