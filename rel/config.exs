@@ -26,5 +26,8 @@ release :elixir_crawler do
     crawler: :permanent,
     sitemap: :permanent
   ]
+  set commands: [
+    "crawler": "rel/commands/crawler.sh"
+  ]
 end
 
