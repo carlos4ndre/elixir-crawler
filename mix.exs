@@ -11,7 +11,7 @@ defmodule CrawlerUmbrella.Mixfile do
 
   defp deps do
     [
-      {:distillery, "~> 1.4", runtime: false},
+      {:mix_docker, "~> 0.5.0"},
     ]
   end
 end

@@ -9,13 +9,13 @@ use Mix.Releases.Config,
 environment :dev do
   set dev_mode: true
   set include_erts: false
-  set cookie: :";bly}$<2RtwLymTj/mRSwgcI(&Nf)}kDRmBM[fSnbLsXqk[K<ixkaSD]hBUc;@aX"
+  set cookie: :"BCk0@*C1w5H>v$;E/%2q(k<?<UhU0&F;2L>a)~g`LIkP=I56WBH,x,6<o?|q{GpB"
 end
 
 environment :prod do
-  set include_erts: true
+  set include_erts: false
   set include_src: false
-  set cookie: :")$XwDQHTMXdW8AK6okLPeNl:>8!EgB.6jiAtFAEDh`0sdanUb90xPu*KXx2&CFR6"
+  set cookie: :"P|cE?k&=2u.oI_oHAMx.,/VGikxLH:%2%Z=R4S,8*RDq8UXQ2[2kw57R]`qkf)05"
 end
 
 release :elixir_crawler do
@@ -26,6 +26,5 @@ release :elixir_crawler do
     crawler: :permanent,
     sitemap: :permanent
   ]
-  set output_dir: './releases/elixir_crawler_app'
 end
 
