@@ -6,5 +6,8 @@ sleep 5
 
 echo "Running elixir crawler"
 shift
-bin/elixir_crawler rpc Elixir.CLI.Runner main $@
+shell_args="'Elixir.List':to_string(\"$@\")"
+split_char="'Elixir.List':to_string(\" \")"
+argv="'Elixir.String':split($shell_args, $split_char)"
+bin/elixir_crawler eval "'Elixir.CLI.Runner':main($argv)"
 echo "Done!"
