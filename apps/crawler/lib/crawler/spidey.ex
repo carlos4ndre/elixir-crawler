@@ -43,14 +43,32 @@ defmodule Crawler.Spidey do
     IO.puts(separator)
   end
 
-  defp print_page_sites(sites) do
-    IO.puts("SITES:")
+  defp print_page_sites(sites) when length(sites) > 0 do
+    print_page_sites_label()
     Enum.each(sites, &IO.puts("> #{&1}"))
   end
 
-  defp print_page_images(images) do
-    IO.puts("IMAGES:")
+  defp print_page_sites(_sites) do
+    print_page_sites_label()
+    IO.puts("> N/A")
+  end
+
+  defp print_page_sites_label() do
+    IO.puts("SITES:")
+  end
+
+  defp print_page_images(images) when length(images) > 0 do
+    print_page_images_label()
     Enum.each(images, &IO.puts("> #{&1}"))
+  end
+
+  defp print_page_images(_images) do
+    print_page_images_label()
+    IO.puts("> N/A")
+  end
+
+  defp print_page_images_label() do
+    IO.puts("IMAGES:")
   end
 
   defp fetch_page(url) do
